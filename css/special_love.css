@@ -1,0 +1,332 @@
+/** Merged CSS for Do You Love Me and Heart Features **/
+
+/* =========================================
+   Do You Love Me Styles
+   ========================================= */
+
+/* Adjusted body style to not interfere with main site, or scoped */
+.dylm-wrapper {
+  /* Using a wrapper if needed, or applying styles to specific containers */
+  /* font-family: "Quicksand", sans-serif; */
+  /* Inherit or set specifically */
+}
+
+/* Renamed .container -> .dylm-container */
+.dylm-container {
+  position: fixed;
+  /* Fixed to viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+  font-family: "Quicksand", sans-serif;
+  color: #ff6b81;
+  /* Centering context for children if needed, or let them position themselves */
+  /* Remove transform as we want it to cover screen */
+  transform: none;
+}
+
+.question-container {
+  position: absolute;
+  top: 50%;
+  /* Center vertical */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Center perfectly */
+  transition: 0.2s;
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+}
+
+.tenor-gif-embed {
+  height: 15rem;
+  pointer-events: none;
+  border-radius: 10px;
+  margin-bottom: 3rem;
+  width: 100%;
+  /* Ensure width */
+}
+
+.question {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  color: #d81b60;
+  /* Explicit color */
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  position: relative;
+  /* For absolute buttons */
+  height: 60px;
+}
+
+.btn {
+  position: absolute;
+  /* Kept absolute for the 'running away' effect */
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #ff6b81;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0px 4px 15px rgba(255, 107, 129, 0.5);
+}
+
+.btn:hover {
+  background-color: #ffa4b1;
+  transform: scale(1.1);
+  box-shadow: 0px 6px 20px rgba(255, 107, 129, 0.7);
+  text-shadow: 1px 1px 5px rgba(255, 182, 193, 0.8);
+}
+
+.yes-btn {
+  right: 54%;
+}
+
+.no-btn {
+  left: 54%;
+}
+
+/* Result Container */
+.result-container {
+  display: none;
+  position: absolute;
+  top: 50%;
+  /* Center perfectly */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.2s;
+  text-align: center;
+  z-index: 2001;
+  width: 100%;
+  max-width: 600px;
+}
+
+
+.gif-result {
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 2rem auto;
+  /* Center horizontally */
+  display: block;
+}
+
+/* ... existing code ... */
+
+/*---------------------- body_center -------------------------*/
+.heart-container .love {
+  width: 520px;
+  /* 13 * 40 */
+  height: 440px;
+  /* 11 * 40 */
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  /* Correct centering: -Height/2 top, -Width/2 left */
+  margin: -220px 0 0 -260px;
+
+  /* Scale down for smaller screens or just generally to 'fit' better */
+  transform: scale(0.8);
+  transform-origin: center center;
+}
+
+.result-container h2 {
+  font-size: 3.2rem;
+  text-align: center;
+  color: #d81b60;
+}
+
+/* Heart Loader */
+.cssload-main {
+  display: none;
+  position: absolute;
+  content: "";
+  top: 50%;
+  /* Center perfectly */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2002;
+}
+
+.cssload-main * {
+  font-size: 62px;
+}
+
+.cssload-heart {
+  animation: cssload-heart 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+  position: relative;
+  /* Changed from absolute to relative for wrapper */
+  /* top/left removed as wrapper handles it */
+}
+
+.cssload-heartL {
+  width: 1em;
+  height: 1em;
+  border: 1px solid #ff0000;
+  background-color: #ff0000;
+  content: "";
+  position: absolute;
+  display: block;
+  border-radius: 100%;
+  animation: cssload-heartL 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+  transform: translate(-28px, -27px);
+}
+
+.cssload-heartR {
+  width: 1em;
+  height: 1em;
+  border: 1px solid #ff0000;
+  background-color: #ff0000;
+  content: "";
+  position: absolute;
+  display: block;
+  border-radius: 100%;
+  transform: translate(28px, -27px);
+  animation: cssload-heartR 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+}
+
+.cssload-square {
+  width: 1em;
+  height: 1em;
+  border: 1px solid #ff0000;
+  background-color: #ff0000;
+  position: relative;
+  display: block;
+  content: "";
+  transform: scale(1) rotate(-45deg);
+  animation: cssload-square 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+}
+
+.cssload-shadow {
+  top: 97px;
+  left: 50%;
+  transform: translateX(-50%);
+  content: "";
+  position: absolute;
+  /* Changed to absolute relative to cssload-main */
+  display: block;
+  bottom: -0.5em;
+  width: 1em;
+  height: 0.24em;
+  background-color: rgb(215, 215, 215);
+  border: 1px solid rgb(215, 215, 215);
+  border-radius: 50%;
+  animation: cssload-shadow 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+}
+
+/* Animations (DLYM) */
+@keyframes cssload-square {
+  50% {
+    border-radius: 100%;
+    transform: scale(0.5) rotate(-45deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(-45deg);
+  }
+}
+
+@keyframes cssload-heart {
+  50% {
+    transform: rotate(360deg);
+  }
+
+  100% {
+    transform: rotate(720deg);
+  }
+}
+
+@keyframes cssload-heartL {
+  60% {
+    transform: scale(0.4);
+  }
+}
+
+@keyframes cssload-heartR {
+  40% {
+    transform: scale(0.4);
+  }
+}
+
+@keyframes cssload-shadow {
+  50% {
+    transform: scale(0.5);
+    border-color: rgb(228, 228, 228);
+  }
+}
+
+
+/* =========================================
+   Heart of Love Styles
+   ========================================= */
+
+/* Use .heart-container instead of .container */
+.heart-container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  /* Fixed to cover screen */
+  top: 0;
+  left: 0;
+  z-index: 3000;
+  /* Highest Z-index */
+  display: none;
+  /* Hidden by default */
+  background: #ffe6e9;
+  /* White/Light Pink background as requested/common */
+}
+
+/*---------------------- body_left -------------------------*/
+.body_left {
+  width: 300px;
+  height: 300px;
+  left: 0;
+  bottom: 110px;
+  position: absolute;
+  z-index: 98;
+}
+
+/*---------------------- body_center -------------------------*/
+/*---------------------- body_center -------------------------*/
+.heart-container .love {
+  width: 520px;
+  /* 13 * 40 */
+  height: 440px;
+  /* 11 * 40 */
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  /* User requested margins */
+  margin: -260px 0 0 -220px;
+
+  /* Scale down to fit better */
+  transform: scale(0.85);
+  transform-origin: center center;
+}
+
+.love .block {
+  right: 0;
+  position: absolute;
+  visibility: hidden;
+  /* background-color: yellow; Debug color removed */
+}
+
+.love .block div {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  background: url("../images/heart.png") no-repeat;
+  background-size: contain;
+  box-sizing: border-box;
+}

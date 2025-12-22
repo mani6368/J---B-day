@@ -1,0 +1,2289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;500;600&family=Edu+QLD+Beginner:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: transparent;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            color: #fff;
+            position: relative;
+        }
+
+        /* Space Background */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at bottom, #1a1a3e 0%, #0f0f23 50%, #050510 100%);
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .nebula {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 30%, rgba(88, 50, 140, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(60, 40, 100, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(70, 50, 120, 0.08) 0%, transparent 50%);
+            animation: nebulaDrift 60s ease-in-out infinite alternate;
+        }
+
+        @keyframes nebulaDrift {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(20px, -20px) scale(1.05);
+            }
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            /* Above nebula layer */
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .star.small {
+            width: 1px;
+            height: 1px;
+        }
+
+        .star.medium {
+            width: 2px;
+            height: 2px;
+        }
+
+        .star.large {
+            width: 3px;
+            height: 3px;
+        }
+
+        .star.extra-large {
+            width: 4px;
+            height: 4px;
+        }
+
+        @keyframes twinkle1 {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes twinkle2 {
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.3);
+            }
+        }
+
+        @keyframes twinkle3 {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.15);
+            }
+        }
+
+        @keyframes twinkle4 {
+
+            0%,
+            100% {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.9;
+                transform: scale(1.25);
+            }
+        }
+
+        .star.twinkle-1 {
+            animation: twinkle1 3s ease-in-out infinite;
+        }
+
+        .star.twinkle-2 {
+            animation: twinkle2 4s ease-in-out infinite;
+        }
+
+        .star.twinkle-3 {
+            animation: twinkle3 5s ease-in-out infinite;
+        }
+
+        .star.twinkle-4 {
+            animation: twinkle4 2.5s ease-in-out infinite;
+        }
+
+        /* Canvas for comets */
+        #cometCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Heart particle canvas */
+        #heartCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 1.5s ease-in;
+        }
+
+        #heartCanvas.show {
+            opacity: 1;
+        }
+
+        /* Hidden SVG for heart path */
+        .heart-svg {
+            position: absolute;
+            display: none;
+        }
+
+        /* Password Modal */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.5s ease;
+        }
+
+        .password-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: bounceIn 1s forwards;
+        }
+
+        .password-content h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #d81b60;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffb7c5;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .password-input:focus {
+            border-color: #d81b60;
+        }
+
+        .submit-btn {
+            background: #d81b60;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #b71550;
+            transform: scale(1.05);
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .welcome-screen.show {
+            opacity: 1;
+        }
+
+        .welcome-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 48px;
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(138, 43, 226, 0.6);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.3em;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .welcome-message-vertical {
+            flex-direction: column;
+            align-items: center;
+            flex-wrap: nowrap;
+            transition: transform 1.5s ease-in-out;
+        }
+
+        .welcome-message-vertical.move-up {
+            transform: translateY(-270px);
+        }
+
+        .blur-word {
+            display: inline-block;
+            filter: blur(5px);
+            opacity: 0;
+            transform: translateY(-30px) translate3d(0, 0, 0);
+            animation: blurTextReveal 0.6s ease-out forwards, blurTextFadeOut 0.4s ease-out forwards;
+            animation-delay: calc(var(--index) * 0.12s), calc(5.2s + var(--index) * 0.1s);
+            will-change: opacity, transform;
+            backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Same as blur-word but WITHOUT auto fade-out */
+        .blur-word-permanent {
+            display: inline-block;
+            filter: blur(5px);
+            opacity: 0;
+            transform: translateY(-30px) translate3d(0, 0, 0);
+            animation: blurTextReveal 0.6s ease-out forwards;
+            animation-delay: calc(var(--index) * 0.12s);
+            will-change: opacity, transform;
+            backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .circular-gallery {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            cursor: grab;
+        }
+
+        .circular-gallery:active {
+            cursor: grabbing;
+        }
+
+        .welcome-message-heart {
+            font-family: 'Dancing Script', cursive;
+            font-size: 48px;
+            color: #fff;
+            text-align: center;
+            line-height: 1.4;
+            /* Better spacing for multi-line text */
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(238, 82, 130, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .blur-line {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.3em;
+        }
+
+        .blur-word-heart {
+            display: inline-block;
+            filter: blur(10px);
+            opacity: 0;
+            transform: translateY(-50px);
+            animation: blurTextReveal 0.7s ease-out forwards;
+            animation-delay: calc(1s + var(--index) * 0.15s);
+            will-change: filter, opacity, transform;
+        }
+
+        @keyframes gentleFadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes gentleFadeOut {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .fade-out {
+            animation: gentleFadeOut 2s ease-out forwards;
+        }
+
+
+
+
+
+        @keyframes blurTextReveal {
+            0% {
+                filter: blur(5px);
+                opacity: 0;
+                transform: translateY(-30px) translate3d(0, 0, 0);
+            }
+
+            100% {
+                filter: blur(0px);
+                opacity: 1;
+                transform: translateY(0) translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes blurTextFadeOut {
+            0% {
+                filter: none;
+                opacity: 1;
+                transform: translateY(0) translate3d(0, 0, 0);
+            }
+
+            100% {
+                filter: none;
+                opacity: 0;
+                transform: translateY(10px) translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+
+
+        @keyframes flyAwayText {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0px);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(5deg);
+                filter: blur(20px);
+                /* Stronger blur for "smooth blur fadeout" */
+            }
+        }
+
+        .fly-away-text {
+            /* Ultra fast 0.5s fade to vanish instantly behind masking */
+            animation: flyAwayText 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+        }
+
+        .blur-out-canvas {
+            transition: filter 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: blur(20px);
+            opacity: 0 !important;
+            transform: scale(1.1);
+        }
+
+        @keyframes smoothFadeInFloat {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes smoothFloat {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .welcome-message {
+                font-size: 36px;
+            }
+
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tab {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Disintegrate Button */
+        #disintegrateBtn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.5s ease;
+            pointer-events: none;
+        }
+
+        #disintegrateBtn.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #disintegrateBtn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        #disintegrateBtn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+            transition: transform 0.3s ease;
+        }
+
+        #disintegrateBtn:hover svg {
+            transform: rotate(45deg);
+        }
+
+        /* Realistic Envelope CSS */
+        .letter-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            /* Initial State: Hidden & Blurred */
+            opacity: 0;
+            filter: blur(20px);
+            /* Start blurred */
+            pointer-events: none;
+
+            /* Transition for smooth fade-in + blur-in effect */
+            transition: opacity 2.0s ease, filter 2.0s ease;
+            /* Slightly slower for elegance */
+            perspective: 1200px;
+        }
+
+        .letter-container.show {
+            opacity: 1;
+            filter: blur(0);
+            /* Clear blur */
+            pointer-events: auto;
+            /* Enable interaction */
+        }
+
+        .realistic-envelope {
+            position: relative;
+            width: 340px;
+            /* Increased from 320 to 340 */
+            height: 260px;
+            /* Increased from 220 to 260 */
+            background: #e6dac3;
+            /* Base paper color */
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 5px 10px rgba(0, 0, 0, 0.2),
+                inset 0 0 20px rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease;
+        }
+
+        .realistic-envelope:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Front details (Fold lines) */
+        .realistic-envelope::before {
+            /* Left triangle fold */
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 130px 0 130px 190px;
+            /* Scaled for 260h/340w */
+            border-color: transparent transparent transparent #dccbb1;
+            z-index: 3;
+            filter: drop-shadow(2px 0 3px rgba(0, 0, 0, 0.1));
+        }
+
+        .realistic-envelope::after {
+            /* Right triangle fold */
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 130px 190px 130px 0;
+            /* Scaled for 260h/340w */
+            border-color: transparent #dccbb1 transparent transparent;
+            z-index: 3;
+            filter: drop-shadow(-2px 0 3px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Bottom Flap */
+        .envelope-pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 170px 150px 170px;
+            /* Adjusted width 340/2 = 170 */
+            border-color: transparent transparent #ebdcc5 transparent;
+            z-index: 4;
+            filter: drop-shadow(0 -3px 5px rgba(0, 0, 0, 0.05));
+        }
+
+        /* Top Flap */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 145px 170px 0 170px;
+            /* Adjusted width 340/2 = 170 */
+            border-color: #f2e6d2 transparent transparent transparent;
+            z-index: 5;
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out, z-index 0.2s linear 0.3s;
+            filter: drop-shadow(0 5px 7px rgba(0, 0, 0, 0.15));
+        }
+
+        /* Wax Seal */
+        .wax-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 45px;
+            background: #ff8c42;
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow:
+                0 3px 5px rgba(0, 0, 0, 0.3),
+                inset 0 3px 5px rgba(255, 255, 255, 0.4),
+                inset 0 -3px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wax-seal::after {
+            content: '❤';
+            color: #fff;
+            font-size: 24px;
+            font-family: serif;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            margin-top: 0;
+        }
+
+        /* Inner Letter - Scaled Up for Readability */
+        .letter-paper {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            /* Reset transform to center */
+            transform: translateX(-50%);
+            width: 285px;
+            /* Ratio approx 1.14 (388/341) */
+            height: 250px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+            transition: bottom 0.5s ease;
+        }
+
+
+        .letter-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Edu QLD Beginner', cursive;
+            padding: 50px 20px 25px 20px;
+            /* Increased top padding to 50px */
+            /* Balanced padding */
+            box-sizing: border-box;
+            opacity: 1;
+            color: #1a1a1a;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            /* Start from top but pushed down */
+            align-items: center;
+            line-height: 1.4;
+            /* Slightly more breathing room */
+            overflow: visible;
+            /* changed from hidden to see if it spills */
+        }
+
+        .letter-content p {
+            margin: 3px 0;
+            font-size: 9px;
+            /* Increased base: 9 * 2.5 = 22.5px effective */
+            font-weight: 600;
+            min-height: 12px;
+        }
+
+        .letter-paper img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            /* Ensure full letter is visible and stretched */
+            border-radius: 2px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animation States */
+        /* 1. Flap Opens */
+        .realistic-envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        /* 2. Letter Slides Up AND Zooms Big */
+        .realistic-envelope.open .letter-paper {
+            /* Use animation instead of transition for sequenced movement */
+            animation: letterReveal 2s forwards 0.4s;
+            /* removed manual transform/transition */
+        }
+
+        @keyframes letterReveal {
+            0% {
+                transform: translateX(-50%) translateY(0) scale(1);
+                /* Reset start */
+                z-index: 2;
+            }
+
+            30% {
+                /* Slide up partially while still 'inside' */
+                transform: translateX(-50%) translateY(-100px) scale(1);
+                z-index: 2;
+            }
+
+            31% {
+                /* Switch to front once mostly clear */
+                z-index: 200;
+            }
+
+            100% {
+                /* Scale up and center */
+                transform: translateX(-50%) translateY(0) scale(2.5);
+                /* Increased to 2.5 and centered */
+                z-index: 200;
+            }
+        }
+
+        @keyframes letterClose {
+            0% {
+                transform: translateX(-50%) translateY(0) scale(2.5);
+                /* Match reveal scale */
+                z-index: 200;
+            }
+
+            69% {
+                z-index: 200;
+            }
+
+            70% {
+                transform: translateX(-50%) translateY(-100px) scale(1);
+                z-index: 2;
+            }
+
+            100% {
+                transform: translateX(-50%) translateY(0) scale(1);
+                /* Reset end */
+                z-index: 2;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Space Background -->
+    <div class="space-background">
+        <div class="nebula"></div>
+        <div class="stars" id="starsContainer"></div>
+    </div>
+
+    <!-- Canvas for Comets -->
+    <canvas id="cometCanvas"></canvas>
+
+    <!-- Password Modal -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-content">
+            <h2>Enter the secret code</h2>
+            <input type="password" class="password-input" id="passwordInput" placeholder="Its your nick name...">
+            <button class="submit-btn" id="submitPassword">Enter</button>
+        </div>
+    </div>
+
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen" style="display: none;">
+        <h1 class="welcome-message">
+            <span class="blur-word" style="--index: 0">Today</span>
+            <span class="blur-word" style="--index: 1">isn't</span>
+            <span class="blur-word" style="--index: 2">just</span>
+            <span class="blur-word" style="--index: 3">a</span>
+            <span class="blur-word" style="--index: 4">day...</span>
+        </h1>
+    </div>
+
+    <!-- Second Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen2" style="display: none;">
+        <h1 class="welcome-message-heart">
+            <div class="blur-line">
+                <span class="blur-word-heart" style="--index: 0">It's</span>
+                <span class="blur-word-heart" style="--index: 1">the</span>
+                <span class="blur-word-heart" style="--index: 2">day</span>
+            </div>
+            <div class="blur-line">
+                <span class="blur-word-heart" style="--index: 3">the</span>
+                <span class="blur-word-heart" style="--index: 4">world</span>
+                <span class="blur-word-heart" style="--index: 5">became</span>
+            </div>
+            <div class="blur-line">
+                <span class="blur-word-heart" style="--index: 6">more</span>
+                <span class="blur-word-heart" style="--index: 7">Beautiful</span>
+                <span class="blur-word-heart" style="--index: 8">🌸</span>
+            </div>
+        </h1>
+    </div>
+
+    <!-- Third Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen3" style="display: none;">
+        <h1 class="welcome-message welcome-message-vertical">
+            <div class="blur-line">
+                <span class="blur-word-permanent" style="--index: 0">And</span>
+                <span class="blur-word-permanent" style="--index: 1">somewhere</span>
+                <span class="blur-word-permanent" style="--index: 2">along</span>
+                <span class="blur-word-permanent" style="--index: 3">the</span>
+                <span class="blur-word-permanent" style="--index: 4">way…</span>
+            </div>
+            <div class="blur-line">
+                <span class="blur-word-permanent" style="--index: 5">these</span>
+                <span class="blur-word-permanent" style="--index: 6">moments</span>
+                <span class="blur-word-permanent" style="--index: 7">became</span>
+                <span class="blur-word-permanent" style="--index: 8">my</span>
+                <span class="blur-word-permanent" style="--index: 9">favorite</span>
+                <span class="blur-word-permanent" style="--index: 10">part</span>
+                <span class="blur-word-permanent" style="--index: 11">of</span>
+                <span class="blur-word-permanent" style="--index: 12">the</span>
+                <span class="blur-word-permanent" style="--index: 13">world.</span>
+            </div>
+        </h1>
+    </div>
+
+    <!-- Circular Gallery Container -->
+    <div id="galleryContainer"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; opacity: 0; transition: opacity 2s ease; pointer-events: none; transform: translateY(50px);">
+    </div>
+
+    <!-- Heart SVG for particles -->
+    <svg class="heart-svg" viewBox="0 0 600 552">
+        <path id="heartPath"
+            d="M300,107.77C284.68,55.67,239.76,0,162.31,0,64.83,0,0,82.08,0,171.71c0,.48,0,.95,0,1.43-.52,19.5,0,217.94,299.87,379.69v0l0,0,.05,0,0,0,0,0v0C600,391.08,600.48,192.64,600,173.14c0-.48,0-.95,0-1.43C600,82.08,535.17,0,437.69,0,360.24,0,315.32,55.67,300,107.77"
+            fill="#ff8c42" />
+    </svg>
+
+    <!-- Canvas for heart particles -->
+    <canvas id="heartCanvas"></canvas>
+
+    <!-- Disintegrate Button -->
+    <button id="disintegrateBtn" title="Disintegrate">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+        </svg>
+    </button>
+
+    <!-- CSS-based Realistic Envelope -->
+    <div id="letterContainer" class="letter-container">
+        <div class="realistic-envelope" id="envelopeWrapper">
+            <!-- The Inner Letter -->
+            <div class="letter-paper">
+                <img src="img/letter2.png" alt="Letter">
+                <div class="letter-content" id="letterContent">
+                    <!-- Text will be typed here by JS -->
+                </div>
+            </div>
+
+            <div class="envelope-flap">
+                <div class="wax-seal"></div>
+            </div>
+            <div class="envelope-pocket"></div>
+        </div>
+    </div>
+
+    <!-- Infinite Hearts Canvas -->
+    <canvas id="infiniteHeartCanvas"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; display: none;"></canvas>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Generate stars for space background
+            const starsContainer = document.getElementById('starsContainer');
+            const numberOfStars = 300;
+            const starSizes = [
+                { class: 'small', weight: 70 },
+                { class: 'medium', weight: 20 },
+                { class: 'large', weight: 8 },
+                { class: 'extra-large', weight: 2 }
+            ];
+            const twinkleClasses = ['twinkle-1', 'twinkle-2', 'twinkle-3', 'twinkle-4'];
+
+            function getRandomStarSize() {
+                const random = Math.random() * 100;
+                let cumulative = 0;
+                for (const size of starSizes) {
+                    cumulative += size.weight;
+                    if (random <= cumulative) return size.class;
+                }
+                return 'small';
+            }
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.classList.add(getRandomStarSize());
+                if (Math.random() > 0.3) {
+                    const twinkleClass = twinkleClasses[Math.floor(Math.random() * twinkleClasses.length)];
+                    star.classList.add(twinkleClass);
+                    star.style.animationDelay = `${Math.random() * 3}s`;
+                }
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                starsContainer.appendChild(star);
+            }
+
+            // Canvas-based Realistic Comets
+            const cometCanvas = document.getElementById("cometCanvas");
+            const cometCtx = cometCanvas.getContext("2d");
+
+            cometCanvas.width = window.innerWidth;
+            cometCanvas.height = window.innerHeight;
+
+            let activeComets = [];
+
+            class RealisticComet {
+                constructor() {
+                    // Random starting position across entire top area (like real space comets)
+                    this.x = Math.random() * cometCanvas.width; // Anywhere across the top
+                    this.y = -100;
+
+                    // Movement properties (moving right and down)
+                    this.speedX = 0.8 + Math.random() * 1.2; // Move right (positive)
+                    this.speedY = 0.8 + Math.random() * 1.2; // Move down (positive)
+
+                    // Visual properties
+                    this.headSize = 3 + Math.random() * 2;
+                    this.tailLength = 80 + Math.random() * 60;
+                    this.opacity = 0.6 + Math.random() * 0.4;
+                    this.life = 0;
+                    this.maxLife = 350 + Math.random() * 150; // Extended lifetime
+                    this.fadeStartLife = this.maxLife * 0.7; // Start fading earlier but more gradually
+
+                    // Color variation - green or blue
+                    this.colorType = Math.random() > 0.5 ? 'green' : 'blue';
+                    if (this.colorType === 'green') {
+                        this.tailColor = { r: 100, g: 255, b: 150 }; // Cyan-green
+                        this.glowColor = { r: 150, g: 255, b: 200 };
+                    } else {
+                        this.tailColor = { r: 100, g: 200, b: 255 }; // Blue
+                        this.glowColor = { r: 150, g: 220, b: 255 };
+                    }
+
+                    // Tail points for curve effect
+                    this.tailPoints = [];
+                }
+
+                draw() {
+                    // Store current position in tail
+                    this.tailPoints.push({ x: this.x, y: this.y });
+                    if (this.tailPoints.length > 30) {
+                        this.tailPoints.shift();
+                    }
+
+                    // Draw tail with gradient and curve
+                    if (this.tailPoints.length > 1) {
+                        for (let i = 0; i < this.tailPoints.length - 1; i++) {
+                            const point = this.tailPoints[i];
+                            const nextPoint = this.tailPoints[i + 1];
+                            const tailOpacity = (i / this.tailPoints.length) * this.opacity * 0.5;
+
+                            cometCtx.beginPath();
+                            cometCtx.moveTo(point.x, point.y);
+                            cometCtx.lineTo(nextPoint.x, nextPoint.y);
+                            cometCtx.strokeStyle = `rgba(${this.tailColor.r}, ${this.tailColor.g}, ${this.tailColor.b}, ${tailOpacity})`;
+                            cometCtx.lineWidth = 2 * (i / this.tailPoints.length);
+                            cometCtx.stroke();
+                        }
+                    }
+
+                    // Draw glowing head with color variation
+                    // Outer glow
+                    const gradient = cometCtx.createRadialGradient(
+                        this.x, this.y, 0,
+                        this.x, this.y, this.headSize * 4
+                    );
+                    gradient.addColorStop(0, `rgba(255, 255, 255, ${this.opacity})`);
+                    gradient.addColorStop(0.3, `rgba(${this.glowColor.r}, ${this.glowColor.g}, ${this.glowColor.b}, ${this.opacity * 0.6})`);
+                    gradient.addColorStop(0.6, `rgba(${this.tailColor.r}, ${this.tailColor.g}, ${this.tailColor.b}, ${this.opacity * 0.3})`);
+                    gradient.addColorStop(1, `rgba(${this.tailColor.r}, ${this.tailColor.g}, ${this.tailColor.b}, 0)`);
+
+                    cometCtx.fillStyle = gradient;
+                    cometCtx.beginPath();
+                    cometCtx.arc(this.x, this.y, this.headSize * 4, 0, Math.PI * 2);
+                    cometCtx.fill();
+
+                    // Bright core
+                    cometCtx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    cometCtx.beginPath();
+                    cometCtx.arc(this.x, this.y, this.headSize, 0, Math.PI * 2);
+                    cometCtx.fill();
+                }
+
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    this.life++;
+
+                    // Smooth gradual fade out
+                    if (this.life > this.fadeStartLife) {
+                        const fadeProgress = (this.life - this.fadeStartLife) / (this.maxLife - this.fadeStartLife);
+                        this.opacity -= fadeProgress * 0.008; // Very gradual fade
+                    }
+
+                    return this.y < cometCanvas.height + 100 && this.opacity > 0.1 && this.life < this.maxLife;
+                }
+            }
+
+            function animateComets() {
+                cometCtx.clearRect(0, 0, cometCanvas.width, cometCanvas.height);
+
+                // Update and draw active comets
+                activeComets = activeComets.filter(comet => {
+                    const isAlive = comet.update();
+                    if (isAlive) {
+                        comet.draw();
+                    }
+                    return isAlive;
+                });
+
+                requestAnimationFrame(animateComets);
+            }
+
+            animateComets();
+
+            // Spawn initial comets (4 to start with)
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => {
+                    activeComets.push(new RealisticComet());
+                }, i * 800); // Stagger initial spawns by 800ms
+            }
+
+            // Spawn comets to maintain 4-6 visible
+            function spawnComet() {
+                if (activeComets.length < 3) { // Optimized limit (was 6)
+                    activeComets.push(new RealisticComet());
+                }
+
+                // Random delay between 3-6 seconds for next comet
+                const nextDelay = 3000 + Math.random() * 3000;
+                setTimeout(spawnComet, nextDelay);
+            }
+
+            // Start spawning loop after initial comets
+            setTimeout(spawnComet, 3000);
+
+            window.addEventListener("resize", () => {
+                cometCanvas.width = window.innerWidth;
+                cometCanvas.height = window.innerHeight;
+            });
+
+            // PRE-LOAD: Initialize heavy particle system immediately
+            // This moves calculation to idle time while user sees password screen
+            window.heartTimeline = initHeartParticles();
+
+            // Password check
+            const passwordModal = document.getElementById('passwordModal');
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const welcomeScreen2 = document.getElementById('welcomeScreen2');
+            const passwordInput = document.getElementById('passwordInput');
+            const submitPassword = document.getElementById('submitPassword');
+
+            submitPassword.addEventListener('click', function () {
+                // Strict password check for 'Ammu' or 'ammu'
+                if (passwordInput.value.toLowerCase() === 'ammu') {
+                    // Play Background Music
+                    const bgMusic = document.getElementById('bgMusic');
+                    if (bgMusic) {
+                        bgMusic.volume = 0.05; // Set volume to 5% (Extremely Low)
+                        bgMusic.play().catch(e => console.log("Audio play failed:", e));
+                    }
+
+                    passwordModal.style.opacity = '0';
+                    setTimeout(() => {
+                        passwordModal.style.display = 'none';
+
+                        // Show first welcome screen immediately for smooth transition
+                        welcomeScreen.style.display = 'flex';
+                        welcomeScreen.classList.add('show');
+
+
+
+                        // After blur text animation completes, transition to second screen
+                        // Timing: Optimized to 5.6s for smoother transition
+                        setTimeout(() => {
+                            welcomeScreen.classList.remove('show');
+
+                            // Start heart particles immediately as first message fades (no pause)
+                            welcomeScreen2.style.display = 'flex';
+
+                            // Play the pre-ready animation and show canvas
+                            // Zero lag because everything is already created
+                            if (window.heartTimeline) window.heartTimeline.play();
+                            document.getElementById('heartCanvas').classList.add('show');
+
+                            // Hide first message after fade completes
+                            setTimeout(() => {
+                                welcomeScreen.style.display = 'none';
+                            }, 800);
+
+                            // After heart forms (2.5 seconds), fade in the container
+                            setTimeout(() => {
+                                welcomeScreen2.classList.add('show');
+
+                                // Fade out heart particles and text after 6 seconds
+                                setTimeout(() => {
+                                    welcomeScreen2.classList.add('fade-out');
+                                    document.getElementById('heartCanvas').classList.add('fade-out');
+
+                                    // Hide completely after fade animation completes
+                                    setTimeout(() => {
+                                        welcomeScreen2.style.display = 'none';
+                                        document.getElementById('heartCanvas').style.display = 'none';
+
+                                        // Show third welcome screen (centered first)
+                                        const welcomeScreen3 = document.getElementById('welcomeScreen3');
+                                        const message3 = welcomeScreen3.querySelector('.welcome-message');
+                                        welcomeScreen3.style.display = 'flex';
+
+                                        setTimeout(() => {
+                                            welcomeScreen3.classList.add('show');
+
+                                            // Move text up after 5 seconds
+                                            setTimeout(() => {
+                                                message3.classList.add('move-up');
+
+                                                // Start Circular Gallery after text moves up
+                                                setTimeout(() => {
+                                                    if (window.startCircularGallery) {
+                                                        window.startCircularGallery();
+                                                    }
+                                                }, 1000); // Wait 1s for text to start moving
+                                            }, 5000);
+                                        }, 100);
+                                    }, 2000); // 2s fade-out duration
+                                }, 6000); // Wait 6 seconds before fading out
+                            }, 100); // Show container immediately so text animation can work
+                        }, 5600);
+                    }, 500);
+                } else {
+                    passwordInput.value = '';
+                    passwordInput.placeholder = 'Try again "Ammu"';
+                    passwordInput.style.borderColor = '#ff4d4d';
+                    setTimeout(() => {
+                        passwordInput.style.borderColor = '#ffb7c5';
+                        passwordInput.placeholder = 'Its your nick name...';
+                    }, 2000);
+                }
+            });
+
+            // Allow Enter key to submit password
+            passwordInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    submitPassword.click();
+                }
+            });
+
+            // Heart Particle Animation Function
+            function initHeartParticles() {
+                const heartCanvas = document.getElementById('heartCanvas');
+                const ctx = heartCanvas.getContext('2d');
+                const heartPath = document.getElementById('heartPath');
+
+                // Canvas setup
+                function resize() {
+                    heartCanvas.width = window.innerWidth;
+                    heartCanvas.height = window.innerHeight;
+                }
+                window.addEventListener('resize', resize);
+                resize();
+
+                const particles = [];
+                const length = heartPath.getTotalLength();
+                // Step value optimized for similar density to original
+                for (let i = 0; i < length; i += 2.5) {
+                    const point = heartPath.getPointAtLength(i);
+                    // Match original randomness
+                    const jitterX = (Math.random() - 0.5) * 30;
+                    const jitterY = (Math.random() - 0.5) * 30;
+
+                    particles.push({
+                        // Store target offset relative to screen center
+                        // SVG viewBox is 600x552, so center is roughly 300, 276
+                        tx: point.x - 300 + jitterX,
+                        ty: point.y - 276 + jitterY,
+                        delay: i * 0.0012,
+                        size: 1.5 + Math.random() // Random size between 1.5 and 2.5
+                    });
+                }
+
+                return {
+                    play: function () {
+                        let startTime = null;
+                        this.stopped = false;
+
+                        const output = this; // Access to 'this' inside animate
+
+                        function animate(timestamp) {
+                            if (output.stopped) return; // Stop loop if flag is set
+                            if (!startTime) startTime = timestamp;
+                            const elapsed = (timestamp - startTime) / 1000;
+
+                            ctx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+                            ctx.fillStyle = '#ff8c42';
+
+                            const cx = heartCanvas.width / 2;
+                            const cy = heartCanvas.height / 2;
+
+                            particles.forEach(p => {
+                                let t = elapsed - p.delay;
+                                if (t < 0) t = 0;
+                                if (t > 2) t = 2; // Duration 2s
+
+                                // EaseInOutQuad interpolation
+                                const normT = t / 2;
+                                const ease = normT < 0.5 ? 2 * normT * normT : -1 + (4 - 2 * normT) * normT;
+
+                                // Interpolate from center (0 offset) to target offset
+                                const currentX = cx + p.tx * ease;
+                                const currentY = cy + p.ty * ease;
+
+                                ctx.beginPath();
+                                ctx.arc(currentX, currentY, p.size, 0, Math.PI * 2);
+                                ctx.fill();
+                            });
+
+                            requestAnimationFrame(animate);
+                        }
+                        requestAnimationFrame(animate);
+                    }
+                };
+            }
+        });
+    </script>
+    <script type="module">
+        // Add timestamp to force reload of the module (cache busting)
+        import initCircularGallery from './circular-gallery.js?v=21';
+        import { ButterflySwarm } from './butterfly-effect.js';
+
+        // Make initGallery available globally
+        window.startCircularGallery = function () {
+            console.log('Starting Circular Gallery...');
+            // Stop hidden heart animation loop to save resources
+            if (window.heartTimeline) window.heartTimeline.stopped = true;
+
+            const container = document.getElementById('galleryContainer');
+            container.style.opacity = '1';
+            container.style.pointerEvents = 'auto'; // Enable interaction
+
+            // Initialize app and store globally
+            const app = initCircularGallery(container, {
+                items: [
+                    { image: 'img/1.png', text: 'Our Beginning ✨' },
+                    { image: 'img/2.png', text: 'My sunshine ☀️' },
+                    { image: 'img/3.png', text: 'Sweet Days 🍭' },
+                    { image: 'img/4.png', text: 'My Person 💖' },
+                    { image: 'img/5.png', text: 'Our journey 🗺️' },
+                    { image: 'img/6.png', text: 'Sweet heart 🍬' },
+                    { image: 'img/7.png', text: 'My Favorite ⭐' },
+                    { image: 'img/8.png', text: 'Just Us 💞' },
+                    { image: 'img/9.png', text: 'Slowly Fell Deeper 🍂' },
+                    { image: 'img/10.png', text: 'Always You 💖' },
+                    { image: 'img/11.png', text: 'My World 🌍' },
+                    { image: 'img/12.png', text: 'Forever Together ♾️' }
+                ],
+                bend: 3,
+                textColor: '#ffffff',
+                borderRadius: 0.05,
+                font: 'bold 30px Dancing Script' // Match the theme font
+            });
+            window.galleryApp = app;
+            console.log('Gallery App Initialized:', app);
+
+            // Show the disintegrate button after gallery appears
+            setTimeout(() => {
+                const btn = document.getElementById('disintegrateBtn');
+                if (btn) {
+                    btn.classList.add('show');
+                    console.log('Disintegrate Button Shown');
+
+                    // Attach click listener here to ensure access to app
+                    btn.onclick = function () {
+                        console.log('Disintegrate Button Clicked - Starting Butterfly Effect');
+
+                        // Instantiate and start butterfly effect
+                        const swarm = new ButterflySwarm();
+                        swarm.start(() => {
+                            // This callback runs when butterflies are "peaking" (shielding the content)
+
+                            // Hide button
+                            btn.classList.remove('show');
+
+                            // 1. Text Fly Away (Slower, blurred)
+                            const welcomeScreen3 = document.getElementById('welcomeScreen3');
+                            if (welcomeScreen3) {
+                                const messageLines = welcomeScreen3.querySelectorAll('.blur-line');
+                                messageLines.forEach((line, index) => {
+                                    setTimeout(() => {
+                                        line.classList.add('fly-away-text');
+                                    }, index * 100);
+                                });
+                            }
+
+                            // 2. Gallery Fade (via blur class)
+                            console.log('Applying blur to container masked by butterflies...');
+                            document.getElementById('galleryContainer').classList.add('blur-out-canvas');
+
+                            // 3. Reveal Letter Cover
+                            const letterContainer = document.getElementById('letterContainer');
+                            if (letterContainer) {
+                                letterContainer.classList.add('show');
+                                console.log('Letter Cover Shown - Interaction Enabled');
+
+                                // Enable Click Interaction
+                                const envelope = document.getElementById('envelopeWrapper');
+                                if (envelope) {
+                                    envelope.onclick = function () {
+                                        this.classList.add('open');
+
+                                        // 1. Trigger Infinite Hearts at 2.4s (when letter is revealed)
+                                        setTimeout(() => {
+                                            const infHeartCanvas = document.getElementById('infiniteHeartCanvas');
+                                            if (infHeartCanvas) {
+                                                infHeartCanvas.style.display = 'block';
+                                                initInfiniteHearts();
+                                            }
+                                        }, 2400);
+
+                                        // 2. Trigger Typing Logic at 4.4s (2s after reveal)
+                                        setTimeout(() => {
+                                            const container = document.getElementById('letterContent');
+                                            // Letter Text Content
+                                            const letterLines = [
+                                                "I don’t know when it started,",
+                                                "but somewhere along the way, you became important to me.",
+                                                " ", // spacer
+                                                "I may not always say everything perfectly,",
+                                                "but my heart is always sure about you.",
+                                                " ", // spacer
+                                                "Thank you for being my smile, my comfort,",
+                                                "and my favorite person to share life with."
+                                            ];
+
+                                            function typeWriter(container, lines, speed = 50) {
+                                                container.innerHTML = ''; // Start empty
+                                                let lineIndex = 0;
+                                                let charIndex = 0;
+                                                let currentP = null;
+
+                                                function type() {
+                                                    if (lineIndex < lines.length) {
+                                                        if (!currentP) {
+                                                            currentP = document.createElement('p');
+                                                            // Handle empty lines specifically
+                                                            if (lines[lineIndex].trim() === "") {
+                                                                currentP.innerHTML = "&nbsp;";
+                                                                currentP.style.margin = "4px 0"; // Increased spacing logic
+                                                            }
+                                                            container.appendChild(currentP);
+                                                        }
+
+                                                        // If line is just a spacer, skip typing
+                                                        if (lines[lineIndex].trim() === "") {
+                                                            lineIndex++;
+                                                            currentP = null;
+                                                            setTimeout(type, speed);
+                                                            return;
+                                                        }
+
+                                                        if (charIndex < lines[lineIndex].length) {
+                                                            currentP.textContent += lines[lineIndex].charAt(charIndex);
+                                                            charIndex++;
+                                                            setTimeout(type, speed);
+                                                        } else {
+                                                            // Line finished
+                                                            lineIndex++;
+                                                            charIndex = 0;
+                                                            currentP = null;
+                                                            setTimeout(type, speed * 5); // Longer pause between lines
+                                                        }
+                                                    } else {
+                                                        // FINISHED TYPING
+                                                        setTimeout(() => {
+                                                            const btn = document.getElementById('nextStepBtn');
+                                                            if (btn) btn.classList.add('show');
+                                                        }, 3000);
+                                                    }
+                                                }
+                                                type();
+                                            }
+
+                                            typeWriter(container, letterLines, 70);
+
+                                        }, 4400); // 2400 (reveal) + 2000 (wait) = 4400ms
+                                    };
+                                }
+                            }
+                        });
+                    };
+                }
+            }, 7000);
+        };
+
+        // --- Infinite Hearts Logic (Vanilla JS) ---
+        function initInfiniteHearts() {
+            const canvas = document.getElementById("infiniteHeartCanvas");
+            if (!canvas) return;
+
+            const ctx = canvas.getContext("2d");
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const hearts = [];
+
+            class Heart {
+                constructor() {
+                    this.reset();
+                    // Start strictly below the screen
+                    this.y = height + Math.random() * height;
+                    this.fade = Math.random();
+                }
+
+                reset() {
+                    this.x = Math.random() * width;
+                    this.y = height + Math.random() * 100;
+                    this.speed = 1 + Math.random() * 1.5;
+                    this.size = Math.random() * 1.5 + 0.5; // Scale
+                    this.opacity = Math.random() * 0.5 + 0.3;
+                    this.velX = 0;
+                    this.swing = Math.random() * 0.2 + 0.1;
+                    // Fixed Orange Color (Matching wax seal #ff8c42 approx Hue 24)
+                    this.color = `hsla(24, 100%, 80%,`;
+                }
+
+                update() {
+                    this.y -= this.speed;
+                    this.velX += (Math.random() - 0.5) * 0.1;
+                    this.x += Math.sin(this.y * 0.01) * this.swing + this.velX;
+
+                    if (this.y < -50) {
+                        this.reset();
+                    }
+                }
+
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.opacity;
+                    ctx.translate(this.x, this.y);
+                    ctx.scale(this.size, this.size);
+                    ctx.beginPath();
+                    // Heart shape path
+                    ctx.fillStyle = this.color + " 1)";
+                    ctx.moveTo(0, 0);
+                    ctx.bezierCurveTo(0, -3, -5, -15, -25, -15);
+                    ctx.bezierCurveTo(-55, -15, -55, 22.5, -55, 22.5);
+                    ctx.bezierCurveTo(-55, 40, -35, 62, 0, 80);
+                    ctx.bezierCurveTo(35, 62, 55, 40, 55, 22.5);
+                    ctx.bezierCurveTo(55, 22.5, 55, -15, 25, -15);
+                    ctx.bezierCurveTo(10, -15, 0, -3, 0, 0);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            // Init hearts
+            for (let i = 0; i < 50; i++) {
+                hearts.push(new Heart());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                hearts.forEach(heart => {
+                    heart.update();
+                    heart.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+    </script>
+
+    <!-- Restored Fireworks Elements -->
+    <canvas id="canvas"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2010; pointer-events: none; background: transparent !important;"></canvas>
+    <div id="tsparticles" style="background: transparent !important;"></div>
+
+    <!-- Audio for Fireworks -->
+    <div style="display: none">
+        <audio class="exp" src="mp3/explosion.mp3" preload="auto"></audio>
+        <audio class="launch" src="mp3/launch.mp3" preload="auto"></audio>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/jQuery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/tsparticles-preset-fireworks@2.12.0/tsparticles.preset.fireworks.bundle.min.js"></script>
+    <script src="js/fireworks.js?v=13"></script>
+
+    <script>
+        // Use this space for any future logic
+    </script>
+
+    <!-- Next Step Arrow Button -->
+    <button id="nextStepBtn" title="Next Step">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+        </svg>
+    </button>
+
+    <!-- Candle Section -->
+    <div id="candleSection" class="candle-container">
+        <div class="candle-wrapper" id="candleWrapper">
+            <!-- Simple CSS Candle -->
+            <div class="candle-body">
+                <div class="flame" id="flame"></div>
+                <div class="wick"></div>
+            </div>
+        </div>
+        <p class="candle-instruction">Make a wish & Blow the candle</p>
+        <div id="countdownTimer" class="countdown-timer">10</div>
+    </div>
+
+    <!-- Birthday Message -->
+    <div id="birthdayMessage" class="birthday-message">
+        HAPPY BIRTHDAY
+        <span>AMMU 🧡</span>
+        <button id="dylmTriggerBtn" class="next-arrow-btn" title="Next Surprise">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+            </svg>
+        </button>
+    </div>
+
+    <style>
+        /* Arrow Button */
+        #nextStepBtn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 15px rgba(255, 140, 66, 0.5);
+        }
+
+        #nextStepBtn.show {
+            opacity: 1;
+            pointer-events: auto;
+            animation: pulseBtn 2s infinite;
+        }
+
+        #nextStepBtn svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        @keyframes pulseBtn {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+
+        /* CANDLE SECTION */
+        .birthday-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 5rem;
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            line-height: 1.2;
+            text-shadow: 0 0 20px rgba(255, 100, 150, 0.8), 0 0 50px rgba(255, 100, 150, 0.6);
+            z-index: 2050;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease, transform 2s ease;
+        }
+
+        .birthday-message.show {
+            opacity: 1;
+            animation: floatMessage 3s ease-in-out infinite alternate;
+        }
+
+        .birthday-message span {
+            display: block;
+            font-family: 'Dancing Script', cursive;
+            font-size: 6rem;
+            /* Slightly larger for 'Ammu' */
+            color: #ff8c42;
+            /* Matching the orange/gold theme or white */
+            color: #fff;
+            text-shadow: 0 0 25px rgba(255, 140, 66, 0.9), 0 0 60px rgba(255, 140, 66, 0.7);
+            margin-top: 10px;
+        }
+
+        @keyframes floatMessage {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            100% {
+                transform: translate(-50%, -55%) scale(1.05);
+            }
+        }
+
+        /* Candle Section */
+        .candle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            /* Dark background for candle to shine */
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
+        }
+
+        .candle-container.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .candle-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .candle-body {
+            width: 60px;
+            height: 180px;
+            background: linear-gradient(#e6dac3, #dccbb1);
+            border-radius: 6px;
+            box-shadow: inset -10px 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .wick {
+            width: 4px;
+            height: 15px;
+            background: #666;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .flame {
+            width: 20px;
+            height: 35px;
+            background: #ffae00;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px #ffae00, 0 0 60px #ff6a00;
+            animation: flicker 0.6s infinite alternate;
+            transition: all 0.5s ease;
+            opacity: 0;
+            /* Hidden initially */
+        }
+
+        .flame.show {
+            opacity: 1;
+        }
+
+        .flame.out {
+            transform: translateX(-50%) scale(0.1);
+            opacity: 0;
+        }
+
+        @keyframes flicker {
+            0% {
+                transform: translateX(-50%) skewX(2deg) scaleY(1);
+            }
+
+            100% {
+                transform: translateX(-50%) skewX(-2deg) scaleY(1.1);
+            }
+        }
+
+        .candle-instruction {
+            margin-top: 50px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 0 0 10px #ffae00;
+            animation: gentleFadeIn 2s ease forwards;
+        }
+
+        .countdown-timer {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            color: #fff;
+            font-weight: bold;
+            margin-top: 20px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Do You Love Me Section - User Provided CSS (Corrected ID) */
+        #dylm-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999 !important;
+            pointer-events: auto;
+            display: none;
+            /* Hidden by default */
+
+            /* Initial State: JUST Opacity, NO Blur */
+            opacity: 0;
+
+            /* Transition: Smoothly animate opacity ONLY */
+            transition: opacity 1.5s ease-out;
+
+            /* GPU Acceleration */
+            transform: translateZ(0);
+
+            /* User global body styles applied to section */
+            justify-content: center;
+            align-items: center;
+            font-family: "Quicksand", sans-serif;
+        }
+
+        #dylm-wrapper.visible {
+            display: flex !important;
+
+            /* Final State: Fully Visible and Sharp */
+            opacity: 1 !important;
+            filter: none !important;
+            -webkit-filter: none !important;
+            backdrop-filter: none !important;
+        }
+
+        #dylm-wrapper.visible * {
+            filter: none !important;
+            backdrop-filter: none !important;
+        }
+
+        #doYouLoveMeSection .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: 0.2s;
+        }
+
+        #dylm-wrapper .question-container {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* Added translate to center it properly based on left 50% */
+            transition: 0.2s;
+            text-align: center;
+            width: 100%;
+        }
+
+        #dylm-wrapper .tenor-gif-embed {
+            height: 15rem;
+            pointer-events: none;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+            display: none;
+            /* User requested removal */
+        }
+
+        #dylm-wrapper .question {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            /* Sharp text, no heavy glow */
+            text-shadow: 0 0 2px #ff6b81;
+            /* Reduced from 10px to 2px */
+        }
+
+        #dylm-wrapper .button-container {
+            display: flex;
+            justify-content: center;
+            /* gap: 1.5rem; - Gap doesn't apply to absolute children in the same way for flow, but useful if they were static */
+            /* Removed position: relative and width constraints to match user intention of positioning relative to question-container */
+            width: 100%;
+            /* Give it some height so absolute buttons have a reference frame if needed, or just let them overflow */
+            /* Constrain width for relative positioning */
+            margin: 0 auto;
+        }
+
+        #dylm-wrapper .btn {
+            position: absolute;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-family: "Poppins", sans-serif;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #ff6b81;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0px 4px 15px rgba(255, 107, 129, 0.5);
+        }
+
+        #dylm-wrapper .btn:hover {
+            background-color: #ffa4b1;
+            transform: scale(1.1);
+            box-shadow: 0px 6px 20px rgba(255, 107, 129, 0.7);
+            text-shadow: 1px 1px 5px rgba(255, 182, 193, 0.8);
+        }
+
+        #dylm-wrapper .yes-btn {
+            right: 54%;
+            /* Adjusted slightly for centering overlap check */
+        }
+
+        #dylm-wrapper .no-btn {
+            left: 54%;
+            /* Adjusted slightly */
+        }
+
+        #dylm-wrapper .result-container {
+            display: none;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: 0.2s;
+            text-align: center;
+            width: 100%;
+        }
+
+        #dylm-wrapper .gif-result {
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            max-width: 80%;
+            max-height: 60vh;
+        }
+
+        #dylm-wrapper .result-container h2 {
+            font-size: 3.2rem;
+            text-align: center;
+            color: #fff;
+        }
+
+        /* Heart Loader - Copied exactly */
+        #dylm-wrapper .cssload-main {
+            display: none;
+            position: absolute;
+            content: "";
+            top: 17%;
+            left: 50%;
+            margin: 200px auto 0 auto;
+            transform: translate(-100%, -50%);
+        }
+
+        #dylm-wrapper .cssload-main * {
+            font-size: 62px;
+        }
+
+        #dylm-wrapper .cssload-heart {
+            animation: cssload-heart 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+            top: 50%;
+            content: "";
+            left: 50%;
+            position: absolute;
+        }
+
+        #dylm-wrapper .cssload-heartL {
+            width: 1em;
+            height: 1em;
+            border: 1px solid #ff0000;
+            background-color: #ff0000;
+            content: "";
+            position: absolute;
+            display: block;
+            border-radius: 100%;
+            animation: cssload-heartL 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+            transform: translate(-28px, -27px);
+        }
+
+        #dylm-wrapper .cssload-heartR {
+            width: 1em;
+            height: 1em;
+            border: 1px solid #ff0000;
+            background-color: #ff0000;
+            content: "";
+            position: absolute;
+            display: block;
+            border-radius: 100%;
+            transform: translate(28px, -27px);
+            animation: cssload-heartR 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+        }
+
+        #dylm-wrapper .cssload-square {
+            width: 1em;
+            height: 1em;
+            border: 1px solid #ff0000;
+            background-color: #ff0000;
+            position: relative;
+            display: block;
+            content: "";
+            transform: scale(1) rotate(-45deg);
+            animation: cssload-square 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+        }
+
+        #dylm-wrapper .cssload-shadow {
+            top: 97px;
+            left: 50%;
+            content: "";
+            position: relative;
+            display: block;
+            bottom: -0.5em;
+            width: 1em;
+            height: 0.24em;
+            background-color: rgb(215, 215, 215);
+            border: 1px solid rgb(215, 215, 215);
+            border-radius: 50%;
+            animation: cssload-shadow 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+        }
+
+        @keyframes cssload-square {
+            50% {
+                border-radius: 100%;
+                transform: scale(0.5) rotate(-45deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(-45deg);
+            }
+        }
+
+        @keyframes cssload-heart {
+            50% {
+                transform: rotate(360deg);
+            }
+
+            100% {
+                transform: rotate(720deg);
+            }
+        }
+
+        @keyframes cssload-heartL {
+            60% {
+                transform: scale(0.4);
+            }
+        }
+
+        @keyframes cssload-heartR {
+            40% {
+                transform: scale(0.4);
+            }
+        }
+
+        @keyframes cssload-shadow {
+            50% {
+                transform: scale(0.5);
+                border-color: rgb(228, 228, 228);
+            }
+        }
+
+        /* Trigger Button */
+        .next-arrow-btn {
+            position: relative;
+            /* Context */
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 30px auto 0 auto;
+            transition: all 0.3s ease;
+            animation: pulseBtn 2s infinite;
+            pointer-events: auto;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .next-arrow-btn.show {
+            opacity: 1;
+        }
+
+        .next-arrow-btn svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        .next-arrow-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+    </style>
+
+    <script>
+        // Logic for Flow
+        // 1. Arrow Button Click
+        const nextBtn = document.getElementById('nextStepBtn');
+        const candleSection = document.getElementById('candleSection');
+        const letterContainer = document.getElementById('letterContainer');
+        const infiniteHearts = document.getElementById('infiniteHeartCanvas');
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function () {
+                // Fade out everything (User request: "all elements will get fadeout with blur effect")
+                nextBtn.style.opacity = '0';
+                nextBtn.style.pointerEvents = 'none';
+
+                if (letterContainer) {
+                    letterContainer.style.transition = 'all 1.5s ease';
+                    letterContainer.style.filter = 'blur(20px)';
+                    letterContainer.style.opacity = '0';
+                }
+                if (infiniteHearts) {
+                    infiniteHearts.style.opacity = '0';
+                }
+
+                // Hide other optional elements if present
+                const wallpaper = document.querySelector('.space-background');
+                // Don't hide background actually, user said "elements". Background should stay or go? 
+                // "all elements will get fadeout" usually implies content. Keeping background makes sense for candle.
+
+                // Show Candle Section (initially without flame)
+                setTimeout(() => {
+                    if (candleSection) {
+                        candleSection.classList.add('show');
+
+                        // Wait 2 seconds, then show flame
+                        setTimeout(() => {
+                            if (flame) flame.classList.add('show');
+                            // After flame appears, start countdown
+                            startCandleCountdown();
+                        }, 2000);
+                    }
+                }, 1000);
+            });
+        }
+
+        // 2. Candle Countdown Logic (Auto)
+        const candleWrapper = document.getElementById('candleWrapper');
+        const flame = document.getElementById('flame');
+        const countdownTimer = document.getElementById('countdownTimer');
+
+        function startCandleCountdown() {
+            let timeLeft = 10;
+            if (countdownTimer) countdownTimer.innerText = timeLeft;
+
+            const timer = setInterval(() => {
+                timeLeft--;
+                if (countdownTimer) countdownTimer.innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+
+                    // User Request: "if the countdown is come to zero after give a 1sec then the flame will getoff"
+                    setTimeout(() => {
+                        // 1. Flame out after 1 second delay
+                        if (flame) flame.classList.remove('show'); // Hide flame
+                        if (flame) flame.classList.add('out'); // Shrink it too
+
+                        // 2. Wait another 1 second after flame out, then fade out the section
+                        setTimeout(() => {
+                            if (candleSection) {
+                                // Apply blur and fade out
+                                candleSection.style.transition = 'all 1.5s ease';
+                                candleSection.style.opacity = '0';
+                                candleSection.style.filter = 'blur(10px)';
+                            }
+
+                            // Change background to black
+                            const spaceBg = document.querySelector('.space-background');
+                            if (spaceBg) spaceBg.style.background = '#000000';
+                            const nebula = document.querySelector('.nebula');
+                            if (nebula) nebula.style.opacity = '0.3';
+
+                            setTimeout(() => {
+                                if (candleSection) candleSection.style.display = 'none';
+                                // START FIREWORKS
+                                if (window.startCustomFireworks) {
+                                    window.startCustomFireworks();
+                                }
+
+                                // SHOW BIRTHDAY MESSAGE
+                                setTimeout(() => {
+                                    const bdayMsg = document.getElementById('birthdayMessage');
+                                    if (bdayMsg) {
+                                        bdayMsg.classList.add('show');
+
+                                        // User Request: Arrow button appears 7 SECONDS AFTER message
+                                        setTimeout(() => {
+                                            const dylmBtn = document.getElementById('dylmTriggerBtn');
+                                            if (dylmBtn) dylmBtn.classList.add('show');
+                                        }, 7000);
+                                    }
+                                }, 500);
+                            }, 1500); // Wait for transition (1.5s)
+                        }, 1000); // Wait 1s after flame out
+                    }, 1000); // Wait 1s AFTER countdown hits 0 before flame goes out
+                }
+            }, 1000);
+        }
+    </script>
+    <!-- Do You Love Me Section (Hidden Initially) -->
+    <!-- New Combined Section -->
+    <link rel="stylesheet" href="css/special_love.css">
+
+    <div id="dylm-wrapper" style="display: none;">
+        <div class="dylm-container">
+            <div class="question-container">
+                <style>
+                    #dylm-wrapper .tenor-gif-embed {
+                        display: none;
+                    }
+                </style>
+                <div class="tenor-gif-embed" data-postid="25789758" data-share-method="host" data-width="100%">
+                    <a href="https://tenor.com/view/tkthao219-bubududu-gif-25789758">Tkthao219 Bubududu Sticker</a>from
+                    <a href="https://tenor.com/search/tkthao219-stickers">Tkthao219 Stickers</a>
+                </div>
+                <!-- <script type="text/javascript" async src="https://tenor.com/embed.js"></script> -->
+                <h2 class="question">Did You Like This??</h2>
+                <div class="button-container">
+                    <button class="yes-btn btn js-yes-btn">Yes</button>
+                    <button class="no-btn btn js-no-btn">No</button>
+                </div>
+            </div>
+
+            <div class="result-container">
+                <video class="gif-result" src="images/cute love gif.mp4" playsinline autoplay loop muted></video>
+                <h2>I knew it😍!</h2>
+            </div>
+
+            <div class="cssload-main">
+                <div class="cssload-heart">
+                    <span class="cssload-heartL"></span>
+                    <span class="cssload-heartR"></span>
+                    <span class="cssload-square"></span>
+                </div>
+                <div class="cssload-shadow"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <audio id="audios" preload="auto" loop>
+        <source src="mp3/1.mp3" />
+    </audio>
+
+    <!-- Background Music -->
+    <audio id="bgMusic" preload="auto" loop>
+        <source src="mp3/bgMusic.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script src="js/special_love.js"></script>
+</body>
+
+</html>
